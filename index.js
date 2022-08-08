@@ -1,3 +1,4 @@
+const path = require('path');
 // 导入express
 const express = require('express');
 // 创建express实例
@@ -13,6 +14,6 @@ app.listen(8000, () => {
     }
 );
 // 静态资源目录
-app.use(express.static('../Yoga/dist'));
+app.use(express.static(path.join(__dirname,'/public')));
 
 

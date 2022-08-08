@@ -44,7 +44,7 @@ router.post('/AddClass', (req, res) => {
     })
 })
 
-router.get('/information/getSignupUsers', (req, res) => {
+router.get('/getSignupUsers', (req, res) => {
     var sqlstr = 'SELECT * FROM signup where c_id = "' + req.query.c_id + '"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'查询失败',req})
@@ -76,7 +76,7 @@ router.get('/information/getSignupUsers', (req, res) => {
 })
 
 
-router.post('/information/addDefault', (req, res) => {
+router.post('/addDefault', (req, res) => {
     var sqlstr = 'INSERT INTO def (u_id,c_name) VALUES ("' + req.body.u_id + '","' + req.body.c_name + '")';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'添加失败',req})
@@ -85,7 +85,7 @@ router.post('/information/addDefault', (req, res) => {
 })
 
 
-router.post('/login/login', (req, res) => {
+router.post('/login', (req, res) => {
     var sqlstr = 'select * from user where u_id = "' + req.body.u_id + '" and pwd = "' + req.body.pwd + '"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'登录失败',req})
