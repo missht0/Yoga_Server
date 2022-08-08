@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
     res.send(req.body);
 })
 
-router.get('/api/getClassByMon', (req, res) => {
+router.get('/getClassByMon', (req, res) => {
     var sqlstr = 'SELECT * FROM classes where s_time like "%' + req.query.mon + '%"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'查询失败',req})
@@ -35,7 +35,7 @@ router.get('/api/getClassByMon', (req, res) => {
     })  
 })
 
-router.post('/api/AddClass', (req, res) => {
+router.post('/AddClass', (req, res) => {
     // res.send(req.body)
     var sqlstr = 'INSERT INTO classes (s_time,c_name,time_long,place,price,num) VALUES ("' + req.body.s_time + '","' + req.body.c_name + '","' + req.body.time_long + '","' + req.body.place + '","' + req.body.price + '","' + req.body.num + '")';
     conf.query(sqlstr, (err, result) => {
@@ -44,7 +44,7 @@ router.post('/api/AddClass', (req, res) => {
     })
 })
 
-router.get('/information/api/getSignupUsers', (req, res) => {
+router.get('/information/getSignupUsers', (req, res) => {
     var sqlstr = 'SELECT * FROM signup where c_id = "' + req.query.c_id + '"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'查询失败',req})
@@ -76,7 +76,7 @@ router.get('/information/api/getSignupUsers', (req, res) => {
 })
 
 
-router.post('/information/api/addDefault', (req, res) => {
+router.post('/information/addDefault', (req, res) => {
     var sqlstr = 'INSERT INTO def (u_id,c_name) VALUES ("' + req.body.u_id + '","' + req.body.c_name + '")';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'添加失败',req})
@@ -85,7 +85,7 @@ router.post('/information/api/addDefault', (req, res) => {
 })
 
 
-router.post('/login/api/login', (req, res) => {
+router.post('/login/login', (req, res) => {
     var sqlstr = 'select * from user where u_id = "' + req.body.u_id + '" and pwd = "' + req.body.pwd + '"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'登录失败',req})
