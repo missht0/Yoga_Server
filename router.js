@@ -97,4 +97,40 @@ router.post('/login', (req, res) => {
     })
 })
 
+
+router.get('/isDefault', (req, res) => {
+    var sqlstr = 'SELECT * from def where u_id = "' + req.query.u_id + '" and c_name = "' + req.query.c_name + '"';
+    conf.query(sqlstr, (err, result) => {
+        if (err) return res.json({code:0,msg:'查询失败',req})
+        if(result.length > 0){
+            res.json({code:1,msg:'无报名权限',req:req.query,data:true})
+        }else{
+            res.json({code:1,msg:'有报名权限',req:req.query,data:false})
+        }
+    } )
+} )
+
+router.post('/signup', (req, res) => {
+    // 将u_id,c_id,u_name,c_name,signup插入signup表中
+    var sqlstr = 'INSERT INTO signup (u_id,c_id,u_name,c_name,signup) VALUES ("' + req.body.u_id + '","' + req.body.c_id + '","' + req.body.u_name + '","' + req.body.c_name + '","' + req.body.signup + '")';
+    conf.query(sqlstr, (err, result) => {
+        if (err) return res.json({code:0,msg:'报名失败',req})
+        res.json({code:1,msg:'报名成功',req:req.body,data:result})
+    } )
+} )
+
+router.post('/signdown', (req, res) => {
+    // 根据u_id,c_id从signup表中删除字段
+    var sqlstr = 'DELETE FROM signup WHERE u_id = "' + req.body.u_id + '" and c_id = "' + req.body.c_id + '"';
+    conf.query(sqlstr, (err, result) => {
+        if (err) return res.json({code:0,msg:'取消报名失败',req})
+        res.json({code:1,msg:'取消报名成功',req:req.body,data:result})
+    } )
+} )
+
+
+
+
+
+
 module.exports = router;
