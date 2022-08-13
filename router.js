@@ -77,7 +77,7 @@ router.get('/getSignupUsers', (req, res) => {
 
 
 router.post('/addDefault', (req, res) => {
-    var sqlstr = 'INSERT INTO def (u_id,c_name) VALUES ("' + req.body.u_id + '","' + req.body.c_name + '")';
+    var sqlstr = 'INSERT INTO def (u_id,c_name,s_time) VALUES ("' + req.body.u_id + '","' + req.body.c_name + '","' + req.body.s_time + '")';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'添加失败',req})
         res.json({code:1,msg:'添加成功',req:req.body,data:result})
@@ -102,7 +102,11 @@ router.get('/isDefault', (req, res) => {
     var sqlstr = 'SELECT * from def where u_id = "' + req.query.u_id + '" and c_name = "' + req.query.c_name + '"';
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({code:0,msg:'查询失败',req})
-        if(result.length > 0){
+        // 删除result中的非本月的数据
+        result = result.filter(item => {
+            return moment(item.s_time).format('YYYY-MM') == moment().format('YYYY-MM');
+        })
+        if(result.length > 1){
             res.json({code:1,msg:'无报名权限',req:req.query,data:true})
         }else{
             res.json({code:1,msg:'有报名权限',req:req.query,data:false})
