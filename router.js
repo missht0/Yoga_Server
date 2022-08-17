@@ -25,7 +25,7 @@ router.get('/getClassByMon', (req, res) => {
             var sqlstr = 'SELECT count(*) as count FROM signup where c_id = ' + item.c_id;
             conf.query(sqlstr, (err, result) => {
                 if (err) return res.json({code:0,msg:'查询失败',req})
-                item.num = result[0].count;
+                item.n_num = result[0].count;
             })
         })
 
