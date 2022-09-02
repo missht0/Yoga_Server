@@ -21,17 +21,19 @@ router.get('/getClassByMon', (req, res) => {
     conf.query(sqlstr, (err, result) => {
         if (err) return res.json({ code: 0, msg: '查询失败', req })
         // 在signup表中查询每门课的报名人数
+        let i = 0;
         result.forEach(item => {
             var sqlstr = 'SELECT count(*) as count FROM signup where c_id = ' + item.c_id;
-            conf.query(sqlstr, (err, result) => {
+            conf.query(sqlstr, (err, result2) => {
                 if (err) return res.json({ code: 0, msg: '查询失败', req })
-                item.n_num = result[0].count;
+                item.n_num = result2[0].count;
+                i++;
+                if (i == result.length) {
+                    res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
+                }
             })
         })
 
-        setTimeout(() => {
-            res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
-        }, 10);
     })
 })
 
@@ -50,6 +52,7 @@ router.get('/getSignupUsers', (req, res) => {
         if (err) return res.json({ code: 0, msg: '查询失败', req })
         else {
             // 根据用户id检测用户是否在default表中，若有，则加上default字段为true，若无，则加上default字段为false
+            let i = 0;
             result.forEach(item => {
                 var sqlstr2 = 'SELECT * from def where u_id = "' + item.u_id + '" and c_id = "' + item.c_id + '"';
                 conf.query(sqlstr2, (err2, result2) => {
@@ -63,13 +66,14 @@ router.get('/getSignupUsers', (req, res) => {
                             item.default = false;
                         }
                     }
+                    i++;
+                    if (i == result.length) {
+                        res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
+                    }
 
                 })
             })
-            // 等待所有query结束，再返回
-            setTimeout(() => {
-                res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
-            }, 10);
+
         }
 
     })

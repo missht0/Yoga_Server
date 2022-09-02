@@ -14,7 +14,7 @@ app.listen(8000, () => {
     }
 );
 // 静态资源目录
-app.use(express.static(path.join(__dirname,'/public')));
-// app.use(express.static('../Yoga/dist'));
+// app.use(express.static(path.join(__dirname,'/public')));
+app.use(express.static('../Yoga/dist'));
 
 
