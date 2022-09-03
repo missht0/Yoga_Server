@@ -52,27 +52,32 @@ router.get('/getSignupUsers', (req, res) => {
         if (err) return res.json({ code: 0, msg: '查询失败', req })
         else {
             // 根据用户id检测用户是否在default表中，若有，则加上default字段为true，若无，则加上default字段为false
-            let i = 0;
-            result.forEach(item => {
-                var sqlstr2 = 'SELECT * from def where u_id = "' + item.u_id + '" and c_id = "' + item.c_id + '"';
-                conf.query(sqlstr2, (err2, result2) => {
-                    if (err2) {
-                        item.default = false;
-                    }
-                    else {
-                        if (result2.length > 0) {
-                            item.default = true;
-                        } else {
+            if (result.length > 0) {
+                let i = 0;
+                result.forEach(item => {
+                    var sqlstr2 = 'SELECT * from def where u_id = "' + item.u_id + '" and c_id = "' + item.c_id + '"';
+                    conf.query(sqlstr2, (err2, result2) => {
+                        if (err2) {
                             item.default = false;
                         }
-                    }
-                    i++;
-                    if (i == result.length) {
-                        res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
-                    }
+                        else {
+                            if (result2.length > 0) {
+                                item.default = true;
+                            } else {
+                                item.default = false;
+                            }
+                        }
+                        i++;
+                        if (i == result.length) {
+                            res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
+                        }
 
+                    })
                 })
-            })
+            }
+            else {
+                res.json({ code: 1, msg: '查询成功', req: req.query, data: result })
+            }
 
         }
 
